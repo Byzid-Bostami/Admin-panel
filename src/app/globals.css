@@ -2,20 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+
+.froala-editor h1 {
+  font-size: 2rem !important;
+  font-weight: bold !important;
+  color: #111 !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.froala-editor h2 {
+  font-size: 1.75rem !important;
+  font-weight: bold !important;
+  color: #222 !important;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.froala-editor h3 {
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: #333 !important;
+}
+
+.froala-editor h4 {
+  font-size: 1.25rem !important;
+  font-weight: bold !important;
+  color: #444 !important;
+}
+
+.froala-editor h5 {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  color: #555 !important;
+}
+
+.froala-editor h6 {
+  font-size: 0.875rem !important;
+  font-weight: bold !important;
+  color: #666 !important;
 }

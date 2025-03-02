@@ -1,101 +1,143 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { Rubik } from 'next/font/google';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios';
+import { useRouter } from "next/navigation";
+
+const rubik = Rubik({ subsets: ['latin'], weight: ['400', '700'] });
+
+
+const Login = () => {
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const router = useRouter();
+  const url = process.env.NEXT_PUBLIC_MAIN_URL;
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    axios
+      .get(`${url}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(() => {
+        router.push("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+        router.push("/");
+      });
+  }, [router,url]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axios
+      .post(`${url}/login`, { userName, email, password })
+      .then((User) => {
+        localStorage.setItem("token", User.data.token);
+        console.log(User);
+        router.push("/dashboard");
+      })
+      .catch((error) => {
+        console.log(error);
+        router.push("/");
+      });
+
+    setUserName('');
+    setEmail('');
+    setPassword('');
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className='min-h-screen flex items-center justify-center'>
+      <div className='bg-stone-50 p-8 flex flex-col space-y-4 rounded-sm shadow shadow-black/40 w-5/6 md:w-[460px] lg:w-[420px]'>
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+          className='flex justify-center items-center self-center'
+          src="/logo.png"
+          alt="Example Image"
+          width={150}
+          height={150}
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className='space-y-1'>
+          <h1 className={`text-[33px] font-bold text-[#323a33] text-center capitalize ${rubik.className}`}>
+            Welcome back!
+          </h1>
+          <p className='text-gray-500 text-center'>Login to continue</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <form className='space-y-3' onSubmit={handleSubmit}>
+          <div className='flex flex-col space-y-1'>
+            <label className='capitalize font-medium text-gray-700' htmlFor="userName">
+              User Name
+            </label>
+            <input
+              className='outline-none ring-1 ring-gray-500/50 p-1 rounded-sm'
+              type="text"
+              value={userName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserName(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className='flex flex-col space-y-1'>
+            <label className='capitalize font-medium text-gray-700' htmlFor="email">
+              Email
+            </label>
+            <input
+              className='outline-none ring-1 ring-gray-500/50 p-1 rounded-sm'
+              type="email"
+              name="email"
+              id="email"
+              value={email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className='flex flex-col space-y-1 relative'>
+            <label className='capitalize font-medium text-gray-700' htmlFor="password">
+              Password
+            </label>
+            <input
+              className='outline-none ring-1 ring-gray-500/50 p-1 rounded-sm pr-10'
+              type={passwordVisible ? 'text' : 'password'}
+              name="password"
+              id="password"
+              value={password}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className='absolute right-3 text-gray-500 top-2/3 transform -translate-y-1/2'
+              onClick={togglePasswordVisibility}
+            >
+              {passwordVisible ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+            </button>
+          </div>
+
+          <button
+            className='hover:bg-[#303631] bg-[#1fa88a] hover:transition-all hover:duration-200 font-medium text-lg text-white capitalize rounded-md w-full py-1'
+            type="submit"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
+export default Login;
