@@ -136,7 +136,7 @@ export default function Home() {
                       unoptimized
                       width={40}
                       height={40}
-                      className="md:size-10 rounded-sm object-cover"
+                      className="md:size-10 size-full rounded-sm object-cover"
                     />
                     <p className="font-medium capitalize">
                       {post.title.length > 39
